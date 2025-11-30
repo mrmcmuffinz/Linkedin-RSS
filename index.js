@@ -71,23 +71,36 @@ function wasPostPublished(feed) {
   }
   // If the post has not been posted, post
   fs.writeFileSync(lastPost, feed.items[0].link);
+  console.log("Writing post ", feed.items[0].link, " link to ", lastPost);
 
   return false;
 }
 
 function pushPastFile() {
   // push the file changes to repository
-  const { exec } = require("child_process");
+  const { execSync } = require('child_process');
+  const path = require("path");
+  const lastPost = path.join(process.env.GITHUB_WORKSPACE, lastPostPath);
 
-  exec("git config --global user.email " + commitEmail);
-
-  exec("git config --global user.name " + commitUser);
-
-  exec("git add .");
-
-  exec("git commit -m '" + commitMessage + "'");
-
-  exec("git push");
+  try {
+    execSync(`git config user.email "${commitEmail}"`);
+    execSync(`git config user.name "${commitUser}"`);
+    const status = execSync('git status --porcelain').toString('utf8').trim();
+    if (!status) {
+      console.log('No changes to commit.');
+      return;
+    }
+    execSync(`git add "${lastPost}"`, { stdio: 'inherit' });
+    const safeMsg = commitMessage.replace(/"/g, '\\"');
+    execSync(`git commit -m "${safeMsg}"`, { stdio: 'inherit' });
+    execSync('git push', { stdio: 'inherit' });
+    console.log('pushPastFile: pushed successfully');
+  } catch (err) {
+    console.error('pushPastFile failed: ', err && err.message);
+    if (err.stdout) console.error('stdout: ', err.stdout.toString());
+    if (err.stderr) console.error('stderr: ', err.stderr.toString());
+    throw err;
+  }
 }
 
 // Publish content on LinkedIn
@@ -208,9 +221,7 @@ try {
               core.setFailed("Failed to post on LinkedIn");
               return;
             }
-            if (!pastPostCheck) {
-              pushPastFile();
-            }
+            pushPastFile();
           })
           .catch((e) => console.log(e));
       })
