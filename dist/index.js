@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 import require$$0$2 from 'os';
 import require$$0$3 from 'crypto';
-import fs from 'fs';
-import path from 'path';
+import require$$1$2 from 'fs';
+import require$$1$7 from 'path';
 import require$$2 from 'http';
-import require$$1$2 from 'https';
+import require$$1$3 from 'https';
 import require$$0$6 from 'net';
-import require$$1$3 from 'tls';
+import require$$1$4 from 'tls';
 import require$$4 from 'events';
 import require$$0$5 from 'assert';
 import require$$0$4 from 'util';
@@ -19,14 +19,16 @@ import require$$0$8 from 'worker_threads';
 import require$$2$1 from 'perf_hooks';
 import require$$5 from 'util/types';
 import require$$4$1 from 'async_hooks';
-import require$$1$4 from 'console';
-import require$$1$5 from 'url';
+import require$$1$5 from 'console';
+import require$$1$6 from 'url';
 import require$$3 from 'zlib';
 import require$$6 from 'string_decoder';
 import require$$0$9 from 'diagnostics_channel';
 import require$$2$2 from 'child_process';
 import require$$6$1 from 'timers';
-import { execSync } from 'node:child_process';
+import https from 'node:https';
+import fs from 'node:fs';
+import path from 'node:path';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -226,7 +228,7 @@ function requireFileCommand () {
 	// We use any as a valid input type
 	/* eslint-disable @typescript-eslint/no-explicit-any */
 	const crypto = __importStar(require$$0$3);
-	const fs$1 = __importStar(fs);
+	const fs = __importStar(require$$1$2);
 	const os = __importStar(require$$0$2);
 	const utils_1 = requireUtils$2();
 	function issueFileCommand(command, message) {
@@ -234,10 +236,10 @@ function requireFileCommand () {
 	    if (!filePath) {
 	        throw new Error(`Unable to find environment variable for file command ${command}`);
 	    }
-	    if (!fs$1.existsSync(filePath)) {
+	    if (!fs.existsSync(filePath)) {
 	        throw new Error(`Missing file at path: ${filePath}`);
 	    }
-	    fs$1.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
+	    fs.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
 	        encoding: 'utf8'
 	    });
 	}
@@ -376,9 +378,9 @@ var hasRequiredTunnel$1;
 function requireTunnel$1 () {
 	if (hasRequiredTunnel$1) return tunnel$1;
 	hasRequiredTunnel$1 = 1;
-	var tls = require$$1$3;
+	var tls = require$$1$4;
 	var http = require$$2;
-	var https = require$$1$2;
+	var https = require$$1$3;
 	var events = require$$4;
 	var util = require$$0$4;
 
@@ -8097,7 +8099,7 @@ function requireConnect () {
 	    let socket;
 	    if (protocol === 'https:') {
 	      if (!tls) {
-	        tls = require$$1$3;
+	        tls = require$$1$4;
 	      }
 	      servername = servername || options.servername || util.getServerName(host) || null;
 
@@ -14121,7 +14123,7 @@ function requirePendingInterceptorsFormatter () {
 	hasRequiredPendingInterceptorsFormatter = 1;
 
 	const { Transform } = require$$0$7;
-	const { Console } = require$$1$4;
+	const { Console } = require$$1$5;
 
 	/**
 	 * Gets the output of `console.table(…)` as a string.
@@ -14348,7 +14350,7 @@ function requireProxyAgent () {
 	hasRequiredProxyAgent = 1;
 
 	const { kProxy, kClose, kDestroy, kInterceptors } = requireSymbols$4();
-	const { URL } = require$$1$5;
+	const { URL } = require$$1$6;
 	const Agent = requireAgent();
 	const Pool = requirePool();
 	const DispatcherBase = requireDispatcherBase();
@@ -24401,7 +24403,7 @@ function requireLib$2 () {
 	Object.defineProperty(lib$2, "__esModule", { value: true });
 	lib$2.HttpClient = lib$2.isHttps = lib$2.HttpClientResponse = lib$2.HttpClientError = lib$2.getProxyUrl = lib$2.MediaTypes = lib$2.Headers = lib$2.HttpCodes = void 0;
 	const http = __importStar(require$$2);
-	const https = __importStar(require$$1$2);
+	const https = __importStar(require$$1$3);
 	const pm = __importStar(requireProxy());
 	const tunnel = __importStar(requireTunnel());
 	const undici_1 = requireUndici();
@@ -25213,7 +25215,7 @@ function requireSummary () {
 		Object.defineProperty(exports$1, "__esModule", { value: true });
 		exports$1.summary = exports$1.markdownSummary = exports$1.SUMMARY_DOCS_URL = exports$1.SUMMARY_ENV_VAR = void 0;
 		const os_1 = require$$0$2;
-		const fs_1 = fs;
+		const fs_1 = require$$1$2;
 		const { access, appendFile, writeFile } = fs_1.promises;
 		exports$1.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
 		exports$1.SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
@@ -25519,7 +25521,7 @@ function requirePathUtils () {
 	};
 	Object.defineProperty(pathUtils, "__esModule", { value: true });
 	pathUtils.toPlatformPath = pathUtils.toWin32Path = pathUtils.toPosixPath = void 0;
-	const path$1 = __importStar(path);
+	const path = __importStar(require$$1$7);
 	/**
 	 * toPosixPath converts the given path to the posix form. On Windows, \\ will be
 	 * replaced with /.
@@ -25551,7 +25553,7 @@ function requirePathUtils () {
 	 * @return string The platform-specific path.
 	 */
 	function toPlatformPath(pth) {
-	    return pth.replace(/[/\\]/g, path$1.sep);
+	    return pth.replace(/[/\\]/g, path.sep);
 	}
 	pathUtils.toPlatformPath = toPlatformPath;
 	
@@ -25605,16 +25607,16 @@ function requireIoUtil () {
 		var _a;
 		Object.defineProperty(exports$1, "__esModule", { value: true });
 		exports$1.getCmdPath = exports$1.tryGetExecutablePath = exports$1.isRooted = exports$1.isDirectory = exports$1.exists = exports$1.READONLY = exports$1.UV_FS_O_EXLOCK = exports$1.IS_WINDOWS = exports$1.unlink = exports$1.symlink = exports$1.stat = exports$1.rmdir = exports$1.rm = exports$1.rename = exports$1.readlink = exports$1.readdir = exports$1.open = exports$1.mkdir = exports$1.lstat = exports$1.copyFile = exports$1.chmod = void 0;
-		const fs$1 = __importStar(fs);
-		const path$1 = __importStar(path);
-		_a = fs$1.promises
+		const fs = __importStar(require$$1$2);
+		const path = __importStar(require$$1$7);
+		_a = fs.promises
 		// export const {open} = 'fs'
 		, exports$1.chmod = _a.chmod, exports$1.copyFile = _a.copyFile, exports$1.lstat = _a.lstat, exports$1.mkdir = _a.mkdir, exports$1.open = _a.open, exports$1.readdir = _a.readdir, exports$1.readlink = _a.readlink, exports$1.rename = _a.rename, exports$1.rm = _a.rm, exports$1.rmdir = _a.rmdir, exports$1.stat = _a.stat, exports$1.symlink = _a.symlink, exports$1.unlink = _a.unlink;
 		// export const {open} = 'fs'
 		exports$1.IS_WINDOWS = process.platform === 'win32';
 		// See https://github.com/nodejs/node/blob/d0153aee367422d0858105abec186da4dff0a0c5/deps/uv/include/uv/win.h#L691
 		exports$1.UV_FS_O_EXLOCK = 0x10000000;
-		exports$1.READONLY = fs$1.constants.O_RDONLY;
+		exports$1.READONLY = fs.constants.O_RDONLY;
 		function exists(fsPath) {
 		    return __awaiter(this, void 0, void 0, function* () {
 		        try {
@@ -25675,7 +25677,7 @@ function requireIoUtil () {
 		        if (stats && stats.isFile()) {
 		            if (exports$1.IS_WINDOWS) {
 		                // on Windows, test for valid extension
-		                const upperExt = path$1.extname(filePath).toUpperCase();
+		                const upperExt = path.extname(filePath).toUpperCase();
 		                if (extensions.some(validExt => validExt.toUpperCase() === upperExt)) {
 		                    return filePath;
 		                }
@@ -25704,11 +25706,11 @@ function requireIoUtil () {
 		                if (exports$1.IS_WINDOWS) {
 		                    // preserve the case of the actual file (since an extension was appended)
 		                    try {
-		                        const directory = path$1.dirname(filePath);
-		                        const upperName = path$1.basename(filePath).toUpperCase();
+		                        const directory = path.dirname(filePath);
+		                        const upperName = path.basename(filePath).toUpperCase();
 		                        for (const actualName of yield exports$1.readdir(directory)) {
 		                            if (upperName === actualName.toUpperCase()) {
-		                                filePath = path$1.join(directory, actualName);
+		                                filePath = path.join(directory, actualName);
 		                                break;
 		                            }
 		                        }
@@ -25796,7 +25798,7 @@ function requireIo () {
 	Object.defineProperty(io, "__esModule", { value: true });
 	io.findInPath = io.which = io.mkdirP = io.rmRF = io.mv = io.cp = void 0;
 	const assert_1 = require$$0$5;
-	const path$1 = __importStar(path);
+	const path = __importStar(require$$1$7);
 	const ioUtil = __importStar(requireIoUtil());
 	/**
 	 * Copies a file or folder.
@@ -25816,7 +25818,7 @@ function requireIo () {
 	        }
 	        // If dest is an existing directory, should copy inside.
 	        const newDest = destStat && destStat.isDirectory() && copySourceDirectory
-	            ? path$1.join(dest, path$1.basename(source))
+	            ? path.join(dest, path.basename(source))
 	            : dest;
 	        if (!(yield ioUtil.exists(source))) {
 	            throw new Error(`no such file or directory: ${source}`);
@@ -25831,7 +25833,7 @@ function requireIo () {
 	            }
 	        }
 	        else {
-	            if (path$1.relative(source, newDest) === '') {
+	            if (path.relative(source, newDest) === '') {
 	                // a file cannot be copied to itself
 	                throw new Error(`'${newDest}' and '${source}' are the same file`);
 	            }
@@ -25853,7 +25855,7 @@ function requireIo () {
 	            let destExists = true;
 	            if (yield ioUtil.isDirectory(dest)) {
 	                // If dest is directory copy src into dest
-	                dest = path$1.join(dest, path$1.basename(source));
+	                dest = path.join(dest, path.basename(source));
 	                destExists = yield ioUtil.exists(dest);
 	            }
 	            if (destExists) {
@@ -25865,7 +25867,7 @@ function requireIo () {
 	                }
 	            }
 	        }
-	        yield mkdirP(path$1.dirname(dest));
+	        yield mkdirP(path.dirname(dest));
 	        yield ioUtil.rename(source, dest);
 	    });
 	}
@@ -25960,7 +25962,7 @@ function requireIo () {
 	        // build the list of extensions to try
 	        const extensions = [];
 	        if (ioUtil.IS_WINDOWS && process.env['PATHEXT']) {
-	            for (const extension of process.env['PATHEXT'].split(path$1.delimiter)) {
+	            for (const extension of process.env['PATHEXT'].split(path.delimiter)) {
 	                if (extension) {
 	                    extensions.push(extension);
 	                }
@@ -25975,7 +25977,7 @@ function requireIo () {
 	            return [];
 	        }
 	        // if any path separators, return empty
-	        if (tool.includes(path$1.sep)) {
+	        if (tool.includes(path.sep)) {
 	            return [];
 	        }
 	        // build the list of directories
@@ -25986,7 +25988,7 @@ function requireIo () {
 	        // across platforms.
 	        const directories = [];
 	        if (process.env.PATH) {
-	            for (const p of process.env.PATH.split(path$1.delimiter)) {
+	            for (const p of process.env.PATH.split(path.delimiter)) {
 	                if (p) {
 	                    directories.push(p);
 	                }
@@ -25995,7 +25997,7 @@ function requireIo () {
 	        // find all matches
 	        const matches = [];
 	        for (const directory of directories) {
-	            const filePath = yield ioUtil.tryGetExecutablePath(path$1.join(directory, tool), extensions);
+	            const filePath = yield ioUtil.tryGetExecutablePath(path.join(directory, tool), extensions);
 	            if (filePath) {
 	                matches.push(filePath);
 	            }
@@ -26104,7 +26106,7 @@ function requireToolrunner () {
 	const os = __importStar(require$$0$2);
 	const events = __importStar(require$$4);
 	const child = __importStar(require$$2$2);
-	const path$1 = __importStar(path);
+	const path = __importStar(require$$1$7);
 	const io = __importStar(requireIo());
 	const ioUtil = __importStar(requireIoUtil());
 	const timers_1 = require$$6$1;
@@ -26459,7 +26461,7 @@ function requireToolrunner () {
 	                (this.toolPath.includes('/') ||
 	                    (IS_WINDOWS && this.toolPath.includes('\\')))) {
 	                // prefer options.cwd if it is specified, however options.cwd may also need to be rooted
-	                this.toolPath = path$1.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
+	                this.toolPath = path.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
 	            }
 	            // if the tool is only a file name, then resolve it from the PATH
 	            // otherwise verify it exists (add extension on Windows if necessary)
@@ -26948,7 +26950,7 @@ function requireCore () {
 		const file_command_1 = requireFileCommand();
 		const utils_1 = requireUtils$2();
 		const os = __importStar(require$$0$2);
-		const path$1 = __importStar(path);
+		const path = __importStar(require$$1$7);
 		const oidc_utils_1 = requireOidcUtils();
 		/**
 		 * The code to exit an action
@@ -27003,7 +27005,7 @@ function requireCore () {
 		    else {
 		        (0, command_1.issueCommand)('add-path', {}, inputPath);
 		    }
-		    process.env['PATH'] = `${inputPath}${path$1.delimiter}${process.env['PATH']}`;
+		    process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
 		}
 		exports$1.addPath = addPath;
 		/**
@@ -27258,6 +27260,8 @@ function requireCore () {
 }
 
 var coreExports = requireCore();
+
+var execExports = requireExec();
 
 var xml2js = {};
 
@@ -39142,9 +39146,9 @@ function requireParser () {
 	if (hasRequiredParser) return parser;
 	hasRequiredParser = 1;
 	const http = require$$2;
-	const https = require$$1$2;
+	const https = require$$1$3;
 	const xml2js = requireXml2js();
-	const url = require$$1$5;
+	const url = require$$1$6;
 
 	const fields = requireFields();
 	const utils = requireUtils();
@@ -39508,102 +39512,195 @@ var RSSParser = /*@__PURE__*/getDefaultExportFromCjs(rssParserExports);
 // ---------------------------------------------------------------------------------------------------------------------
 // Generic Node.js API to post on LinkedIn
 // ---------------------------------------------------------------------------------------------------------------------
-const accessToken = coreExports.getInput("ln_access_token");
-const feedList = coreExports.getInput("feed_list");
-const embedImage = coreExports.getInput("embed_image");
-const lastPostPath = coreExports.getInput("last_post_path");
 
-const commitUser = coreExports.getInput("commit_user");
-const commitEmail = coreExports.getInput("commit_email");
-const commitMessage = coreExports.getInput("commit_message");
+/**
+ * Retrieves the LinkedIn user ID (owner ID) using the provided access token.
+ * First attempts to get the ID from /v2/userinfo endpoint. If the 'sub' field
+ * is not present, falls back to /v2/me endpoint.
+ *
+ * @param {string} accessToken - LinkedIn OAuth access token
+ * @returns {Promise<string>} The LinkedIn user ID
+ * @throws {Error} If the API request fails or the response is invalid
+ *
+ * @example
+ * const ownerId = await getLinkedinId('your-access-token');
+ * console.log(ownerId); // 'abc123xyz'
+ */
+async function getLinkedinId(accessToken) {
+  const hostname = "api.linkedin.com";
+  const pathUrl = "/v2/userinfo";
+  const method = "GET";
+  const headers = {
+    Authorization: "Bearer " + accessToken,
+    "cache-control": "no-cache",
+    "X-Restli-Protocol-Version": "2.0.0",
+  };
+  const body = "";
 
-// Get LinkedIn ID, i.e. ownerId
-function getLinkedinId(accessToken) {
-  return new Promise((resolve, reject) => {
-    const hostname = "api.linkedin.com";
-    const path = "/v2/userinfo";
-    const method = "GET";
-    const headers = {
-      Authorization: "Bearer " + accessToken,
-      "cache-control": "no-cache",
-      "X-Restli-Protocol-Version": "2.0.0",
-    };
-    const body = "";
-    _request(method, hostname, path, headers, body)
-      .then((r) => {
-        // Check if sub has anything or else call /v2/me
-        if (JSON.parse(r.body).sub) return resolve(JSON.parse(r.body).sub);
-        // If sub is empty, call /v2/me
-        const hostname = "api.linkedin.com";
-        const path = "/v2/me";
-        const method = "GET";
+  try {
+    coreExports.debug("Fetching LinkedIn user info");
+    const r = await _request(method, hostname, pathUrl, headers, body);
+    const data = JSON.parse(r.body);
 
-        _request(method, hostname, path, headers, body)
-          .then((r) => {
-            resolve(JSON.parse(r.body).id);
-          })
-          .catch((e) => reject(e));
-      })
-      .catch((e) => reject(e));
-  });
+    // Check if sub exists
+    if (data.sub) {
+      coreExports.debug(`Found LinkedIn ID: ${data.sub}`);
+      return data.sub;
+    }
+
+    // If sub is empty, call /v2/me
+    coreExports.debug("No sub found, calling /v2/me");
+    const meResponse = await _request(
+      method,
+      hostname,
+      "/v2/me",
+      headers,
+      body,
+    );
+    const userId = JSON.parse(meResponse.body).id;
+    coreExports.debug(`Found LinkedIn ID from /v2/me: ${userId}`);
+    return userId;
+  } catch (error) {
+    coreExports.error(`Failed to get LinkedIn ID: ${error.message}`);
+    throw error;
+  }
 }
 
-// Check if post has already been published
-function wasPostPublished(feed) {
-  // Read .lastPost file in .github/workflows/ to check if the post has been posted
-  const lastPost = path.join(process.env.GITHUB_WORKSPACE, lastPostPath);
-
+/**
+ * Checks if the latest post from the RSS feed has already been published to LinkedIn.
+ * Reads the last published post URL from a file and compares it with the latest feed item.
+ * If the file doesn't exist, it creates it.
+ *
+ * @param {Object} feed - Parsed RSS feed object from rss-parser
+ * @param {Array} feed.items - Array of feed items
+ * @param {string} feed.items[].link - URL of the feed item
+ * @param {string} lastPostPath - Full file path where the last post URL is stored
+ * @returns {boolean} True if the post was already published, false otherwise
+ *
+ * @example
+ * const feed = await parser.parseURL('https://example.com/feed.xml');
+ * const wasPublished = wasPostPublished(feed, '/path/to/.lastPost.txt');
+ * if (wasPublished) {
+ *   console.log('Already published!');
+ * }
+ */
+function wasPostPublished(feed, lastPostPath) {
   let lastPostContent = "";
-  try {
-    lastPostContent = fs.readFileSync(lastPost, "utf8");
-  } catch {
-    console.log("No .lastPost.txt file found");
 
-    // Create directories if they dont exist
-    fs.mkdirSync(path.dirname(lastPost), { recursive: true });
+  try {
+    lastPostContent = fs.readFileSync(lastPostPath, "utf8");
+    coreExports.debug(`Read last post file: ${lastPostPath}`);
+  } catch {
+    coreExports.info(`No ${lastPostPath} file found, creating it`);
+
+    // Create directories if they don't exist
+    fs.mkdirSync(path.dirname(lastPostPath), { recursive: true });
 
     // Create file if it doesn't exist
-    fs.writeFileSync(lastPost, "");
+    fs.writeFileSync(lastPostPath, "");
   }
+
   // If the post has been posted, skip
   if (lastPostContent === feed.items[0].link) {
-    console.log("Post already posted");
+    coreExports.info(`Post already published: ${feed.items[0].link}`);
     return true;
   }
-  // If the post has not been posted, post
-  fs.writeFileSync(lastPost, feed.items[0].link);
-  console.log("Writing post ", feed.items[0].link, " link to ", lastPost);
+
+  // If the post has not been posted, write it
+  fs.writeFileSync(lastPostPath, feed.items[0].link);
+  coreExports.info(`Saving post link to ${lastPostPath}: ${feed.items[0].link}`);
 
   return false;
 }
 
-function pushPastFile() {
-  // push the file changes to repository
-  const lastPost = path.join(process.env.GITHUB_WORKSPACE, lastPostPath);
-
+/**
+ * Commits and pushes the last post file to the git repository.
+ * Configures git with the provided user credentials, checks for changes,
+ * and pushes them to the remote repository.
+ *
+ * @param {string} lastPostPath - Full file path to the last post tracking file
+ * @param {string} commitEmail - Email address for git commit author
+ * @param {string} commitUser - Username for git commit author
+ * @param {string} commitMessage - Commit message for the git commit
+ * @returns {Promise<void>}
+ * @throws {Error} If git operations fail
+ *
+ * @example
+ * await pushPastFile(
+ *   '/workspace/.github/.lastPost.txt',
+ *   'bot@example.com',
+ *   'LinkedIn Bot',
+ *   'Update last post marker'
+ * );
+ */
+async function pushPastFile(
+  lastPostPath,
+  commitEmail,
+  commitUser,
+  commitMessage,
+) {
   try {
-    execSync(`git config user.email "${commitEmail}"`);
-    execSync(`git config user.name "${commitUser}"`);
-    const status = execSync("git status --porcelain").toString("utf8").trim();
-    if (!status) {
-      console.log("No changes to commit.");
+    coreExports.info("Configuring git credentials");
+
+    // Configure git
+    await execExports.exec("git", ["config", "user.email", commitEmail]);
+    await execExports.exec("git", ["config", "user.name", commitUser]);
+
+    // Check if there are changes
+    coreExports.debug("Checking for git changes");
+    const { stdout } = await execExports.getExecOutput("git", [
+      "status",
+      "--porcelain",
+    ]);
+
+    if (!stdout.trim()) {
+      coreExports.info("No changes to commit");
       return;
     }
-    execSync(`git add "${lastPost}"`, { stdio: "inherit" });
-    const safeMsg = commitMessage.replace(/"/g, '\\"');
-    execSync(`git commit -m "${safeMsg}"`, { stdio: "inherit" });
-    execSync("git push", { stdio: "inherit" });
-    console.log("pushPastFile: pushed successfully");
+
+    // Add, commit, and push
+    coreExports.info(`Committing changes to ${lastPostPath}`);
+    await execExports.exec("git", ["add", lastPostPath]);
+    await execExports.exec("git", ["commit", "-m", commitMessage]);
+
+    coreExports.info("Pushing changes to repository");
+    await execExports.exec("git", ["push"]);
+
+    coreExports.info("Successfully pushed changes");
   } catch (err) {
-    console.error("pushPastFile failed: ", err && err.message);
-    if (err.stdout) console.error("stdout: ", err.stdout.toString());
-    if (err.stderr) console.error("stderr: ", err.stderr.toString());
+    coreExports.error(`Failed to push changes: ${err.message}`);
     throw err;
   }
 }
 
-// Publish content on LinkedIn
-function postShare(
+/**
+ * Posts a share/update to LinkedIn using the LinkedIn v2 API.
+ * Creates a post with a title, text content, and optional thumbnail image.
+ *
+ * @param {string} accessToken - LinkedIn OAuth access token
+ * @param {string} ownerId - LinkedIn user ID (URN format without prefix)
+ * @param {string} title - Title of the share
+ * @param {string} text - Main text content (max 1300 characters)
+ * @param {string} shareUrl - URL to be shared
+ * @param {string} shareThumbnailUrl - URL of the thumbnail image for the share
+ * @returns {Promise<Object>} Response object containing status, headers, and body
+ * @returns {number} returns.status - HTTP status code
+ * @returns {Object} returns.headers - Response headers
+ * @returns {string} returns.body - Response body as string
+ * @throws {Error} If the API request fails
+ *
+ * @example
+ * const result = await postShare(
+ *   'access-token',
+ *   'abc123',
+ *   'Blog Post Title',
+ *   'Check out my latest post!',
+ *   'https://example.com/post',
+ *   'https://example.com/image.jpg'
+ * );
+ * console.log(result.status); // 201
+ */
+async function postShare(
   accessToken,
   ownerId,
   title,
@@ -39611,61 +39708,87 @@ function postShare(
   shareUrl,
   shareThumbnailUrl,
 ) {
-  return new Promise((resolve, reject) => {
-    const hostname = "api.linkedin.com";
-    const path = "/v2/shares";
-    const method = "POST";
-    const body = {
-      owner: "urn:li:person:" + ownerId,
-      subject: title,
-      text: {
-        text, // max 1300 characters
-      },
-      content: {
-        contentEntities: [
-          {
-            entityLocation: shareUrl,
-            thumbnails: [
-              {
-                resolvedUrl: shareThumbnailUrl,
-              },
-            ],
-          },
-        ],
-        title,
-      },
-      distribution: {
-        linkedInDistributionTarget: {},
-      },
-    };
-    const headers = {
-      Authorization: "Bearer " + accessToken,
-      "cache-control": "no-cache",
-      "X-Restli-Protocol-Version": "2.0.0",
-      "Content-Type": "application/json",
-      "x-li-format": "json",
-      "Content-Length": Buffer.byteLength(JSON.stringify(body)),
-    };
-    _request(method, hostname, path, headers, JSON.stringify(body))
-      .then((r) => {
-        resolve(r);
-      })
-      .catch((e) => reject(e));
-  });
+  const hostname = "api.linkedin.com";
+  const pathUrl = "/v2/shares";
+  const method = "POST";
+  const body = {
+    owner: "urn:li:person:" + ownerId,
+    subject: title,
+    text: {
+      text, // max 1300 characters
+    },
+    content: {
+      contentEntities: [
+        {
+          entityLocation: shareUrl,
+          thumbnails: [
+            {
+              resolvedUrl: shareThumbnailUrl,
+            },
+          ],
+        },
+      ],
+      title,
+    },
+    distribution: {
+      linkedInDistributionTarget: {},
+    },
+  };
+  const headers = {
+    Authorization: "Bearer " + accessToken,
+    "cache-control": "no-cache",
+    "X-Restli-Protocol-Version": "2.0.0",
+    "Content-Type": "application/json",
+    "x-li-format": "json",
+    "Content-Length": Buffer.byteLength(JSON.stringify(body)),
+  };
+
+  coreExports.debug(`Posting to LinkedIn: ${title}`);
+  return await _request(
+    method,
+    hostname,
+    pathUrl,
+    headers,
+    JSON.stringify(body),
+  );
 }
 
-// Generic HTTP requester
-function _request(method, hostname, path, headers, body) {
+/**
+ * Generic HTTPS request handler for making API calls.
+ * Creates and executes an HTTPS request with the provided parameters.
+ *
+ * @private
+ * @param {string} method - HTTP method (GET, POST, PUT, DELETE, etc.)
+ * @param {string} hostname - API hostname (e.g., 'api.linkedin.com')
+ * @param {string} pathUrl - URL path (e.g., '/v2/me')
+ * @param {Object} headers - HTTP headers object
+ * @param {string} body - Request body as a string (JSON stringified for POST/PUT)
+ * @returns {Promise<Object>} Response object
+ * @returns {number} returns.status - HTTP status code
+ * @returns {Object} returns.headers - Response headers
+ * @returns {string} returns.body - Response body as string
+ * @throws {Error} If the request fails or encounters a network error
+ *
+ * @example
+ * const response = await _request(
+ *   'GET',
+ *   'api.linkedin.com',
+ *   '/v2/me',
+ *   { 'Authorization': 'Bearer token' },
+ *   ''
+ * );
+ */
+function _request(method, hostname, pathUrl, headers, body) {
   return new Promise((resolve, reject) => {
     const reqOpts = {
       method,
       hostname,
-      path,
+      path: pathUrl,
       headers,
       rejectUnauthorized: false, // WARNING: accepting unauthorised end points for testing ONLY
     };
     let resBody = "";
-    const req = require$$1$2.request(reqOpts, (res) => {
+    const req = https.request(reqOpts, (res) => {
       res.on("data", (data) => {
         resBody += data.toString("utf8");
       });
@@ -39687,53 +39810,128 @@ function _request(method, hostname, path, headers, body) {
   });
 }
 
-try {
-  const parse = async (url) => {
-    const feed = await new RSSParser().parseURL(url);
+/**
+ * Main execution function for the GitHub Action.
+ * Orchestrates the entire workflow:
+ * 1. Validates inputs
+ * 2. Parses RSS feed
+ * 3. Checks if post was already published
+ * 4. Posts to LinkedIn if new
+ * 5. Updates tracking file and commits changes
+ *
+ * @async
+ * @returns {Promise<void>}
+ * @throws Will call core.setFailed() with error message on failure
+ *
+ * @description
+ * This function reads GitHub Action inputs, parses an RSS feed,
+ * and posts the latest item to LinkedIn if it hasn't been posted before.
+ * After successful posting, it updates a tracking file with the post URL
+ * and commits the change to the repository.
+ *
+ * Required GitHub Action Inputs:
+ * - ln_access_token: LinkedIn OAuth access token
+ * - feed_list: RSS feed URL
+ * - last_post_path: Path to tracking file (default: .github/.lastPost.txt)
+ * - commit_user: Git commit username (default: Linkedin-Post-Action)
+ * - commit_email: Git commit email (default: linkedin-post-action@example.com)
+ * - commit_message: Git commit message (default: Update Last Post File)
+ *
+ * Optional Inputs:
+ * - embed_image: Custom thumbnail image URL for the LinkedIn post
+ *
+ * @example
+ * // Called automatically when the action runs
+ * run();
+ */
+async function run() {
+  const accessToken = coreExports.getInput("ln_access_token");
+  const feedList = coreExports.getInput("feed_list");
+  const embedImage = coreExports.getInput("embed_image");
+  const lastPostPath = path.join(
+    process.env.GITHUB_WORKSPACE,
+    coreExports.getInput("last_post_path"),
+  );
+  const commitUser = coreExports.getInput("commit_user");
+  const commitEmail = coreExports.getInput("commit_email");
+  const commitMessage = coreExports.getInput("commit_message");
 
-    console.log(feed.title);
-    getLinkedinId(accessToken)
-      .then((ownerId) => {
-        const pastPostCheck = wasPostPublished(feed);
-        if (pastPostCheck) {
-          coreExports.warning("Post was already published");
-          coreExports.warning("Ending job because post was already published");
-          return;
-        }
+  // Validate required inputs
+  if (!accessToken) {
+    coreExports.setFailed("LinkedIn access token is required");
+    return;
+  }
 
-        postShare(
-          accessToken,
-          ownerId,
-          feed.title,
-          feed.items[0].title,
-          feed.items[0].link,
-          embedImage ?? feed.items[0].link,
-        )
-          .then((r) => {
-            console.log(r); // status 201 signal successful posting
-            if (r.status === 401) {
-              coreExports.setFailed(
-                "Failed to post on LinkedIn, please check your access token is valid",
-              );
-              return;
-            } else if (r.status !== 201) {
-              coreExports.setFailed("Failed to post on LinkedIn");
-              return;
-            }
-            pushPastFile();
-          })
-          .catch((e) => console.log(e));
-      })
-      .catch((e) => console.log(e));
-    console.log(
-      `${feed.items[0].title} - ${feed.items[0].link}\n${feed.items[0].contentSnippet}\n\n`,
+  if (!feedList) {
+    coreExports.setFailed("RSS feed URL is required");
+    return;
+  }
+
+  try {
+    coreExports.info(`Parsing RSS feed: ${feedList}`);
+
+    const feed = await new RSSParser().parseURL(feedList);
+    coreExports.info(`Feed title: ${feed.title}`);
+
+    if (!feed.items || feed.items.length === 0) {
+      coreExports.setFailed("No items found in RSS feed");
+      return;
+    }
+
+    coreExports.info(`Latest post: ${feed.items[0].title}`);
+
+    const ownerId = await getLinkedinId(accessToken);
+    coreExports.info(`LinkedIn owner ID: ${ownerId}`);
+
+    const pastPostCheck = wasPostPublished(feed, lastPostPath);
+    if (pastPostCheck) {
+      coreExports.warning("Post was already published");
+      coreExports.warning("Ending job because post was already published");
+      return;
+    }
+
+    coreExports.info("Posting to LinkedIn...");
+    const result = await postShare(
+      accessToken,
+      ownerId,
+      feed.title,
+      feed.items[0].title,
+      feed.items[0].link,
+      embedImage ?? feed.items[0].link,
     );
-  };
 
-  console.log("Parsing " + feedList);
+    coreExports.info(`LinkedIn API response status: ${result.status}`);
 
-  parse(feedList);
-} catch (error) {
-  coreExports.setFailed(error.message);
+    if (result.status === 201) {
+      coreExports.info("✅ Successfully posted to LinkedIn");
+      coreExports.info(`Post: ${feed.items[0].title}`);
+      coreExports.info(`Link: ${feed.items[0].link}`);
+      if (feed.items[0].contentSnippet) {
+        coreExports.info(`Content: ${feed.items[0].contentSnippet}`);
+      }
+
+      await pushPastFile(lastPostPath, commitEmail, commitUser, commitMessage);
+    } else if (result.status === 401) {
+      coreExports.setFailed("Failed to post on LinkedIn: Invalid access token");
+      coreExports.error(
+        "Please check your LinkedIn access token is valid and has not expired",
+      );
+      return;
+    } else {
+      coreExports.setFailed(`Failed to post on LinkedIn (Status: ${result.status})`);
+      coreExports.error(`Response: ${result.body}`);
+      return;
+    }
+  } catch (error) {
+    coreExports.setFailed(`Action failed: ${error.message}`);
+    coreExports.error(error.stack || error);
+  }
 }
+
+// Only run if this file is executed directly (not imported for tests)
+if (import.meta.url === `file://${process.argv[1]}`) {
+  run();
+}
+
+export { _request, getLinkedinId, postShare, pushPastFile, wasPostPublished };
 //# sourceMappingURL=index.js.map

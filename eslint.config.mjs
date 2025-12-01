@@ -1,33 +1,35 @@
-// eslint.config.mjs
 import js from "@eslint/js";
 import globals from "globals";
 import prettierConfig from "eslint-config-prettier";
 
 export default [
-  // Apply recommended rules
   js.configs.recommended,
-  
-  // Prettier config to avoid conflicts
   prettierConfig,
-  
-  // Main configuration
   {
     files: ["src/**/*.js", "**/*.mjs"],
     languageOptions: {
       ecmaVersion: 2024,
-      sourceType: "module",  // For import/export
+      sourceType: "module",
       globals: {
         ...globals.node,
-      }
+      },
     },
     rules: {
-      // Custom rules
       "no-unused-vars": "warn",
-      "no-console": "off",  // console is fine in actions
-    }
+      "no-console": "off",
+    },
   },
-  
-  // Config files
+  {
+    files: ["__tests__/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2024,
+      sourceType: "module",
+      globals: {
+        ...globals.node,
+        ...globals.vitest, // Add vitest globals (describe, it, expect, etc.)
+      },
+    },
+  },
   {
     files: ["*.config.js", "*.config.mjs"],
     languageOptions: {
@@ -35,12 +37,10 @@ export default [
       sourceType: "module",
       globals: {
         ...globals.node,
-      }
-    }
+      },
+    },
   },
-  
-  // Ignore patterns
   {
-    ignores: ["dist/", "node_modules/", "coverage/"]
-  }
+    ignores: ["dist/", "node_modules/", "coverage/", "__tests__/temp/"],
+  },
 ];
