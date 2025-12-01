@@ -1,5 +1,5 @@
 name: "Linkedin-RSS"
-author: "Arisamiga"
+author: "mrmcmuffinz"
 description: "Post the latest post from your RSS Feed to your Linkedin"
 inputs:
   feed_list: # Url of RSS
@@ -28,7 +28,7 @@ inputs:
     default: "Update Last Post File"
     required: false
 runs:
-  using: "node16"
+  using: "node24"
   main: "dist/index.js"
 branding:
   icon: "activity"
