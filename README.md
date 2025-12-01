@@ -2,11 +2,7 @@
 
 Post the latest post from your RSS Feed to your LinkedIn Profile
 
-<a href="https://github.com/Arisamiga/Linkedin-RSS/issues">
- <img alt="Issues" src="https://img.shields.io/github/issues/Arisamiga/Linkedin-RSS?color=0088ff" />
-</a>
-
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/3745df43ebbe497990648d06ea0cd2fa)](https://app.codacy.com/gh/Arisamiga/Linkedin-RSS/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a791c7e4a26e44909a44783c6ff0ffd4)](https://app.codacy.com/gh/mrmcmuffinz/Linkedin-RSS/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ## How to use
 
@@ -16,24 +12,34 @@ Post the latest post from your RSS Feed to your LinkedIn Profile
 
 ```yaml
 name: Linkedin blog post workflow
+
+permissions:
+  contents: write
+
 on:
-  schedule: # Run workflow automatically
-    - cron: "0 * * * *" # Runs every hour, on the hour
-  workflow_dispatch: # Run workflow manually (without waiting for the cron to be called), through the GitHub Actions Workflow page directly
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch: {}
 
 jobs:
   linkedin_rss_job:
     runs-on: ubuntu-latest
-    name: Post Latest RSS Post to Linkedin
+    if: github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Get Latest Post / Post On Linkedin
-        uses: Arisamiga/Linkedin-RSS@master
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          feed_list: # Url of RSS
-          ln_access_token: # Url of LinkedIn Access Token
-          embed_image: # Url of embed image
+          persist-credentials: true
+      - name: Post latest blog post to LinkedIn
+        uses: mrmcmuffinz/Linkedin-RSS/@main
+        with:
+          feed_list: "https://mrmcmuffinz.github.io/posts/index.xml"
+          ln_access_token: "${{ secrets.LINKEDIN_ACCESS_TOKEN }}"
+          embed_image: "https://mrmcmuffinz.github.io/images/social-card.png"
+          last_post_path: ".github/.lastPost.txt"
+          commit_user: "linkedin-bot"
+          commit_email: "...@users.noreply.github.com"
+          commit_message: "Update last LinkedIn post marker"
 ```
 
 | Parameter         | Required | Description                                                  | Default                            |
@@ -72,4 +78,4 @@ Register the app in [LinkedIn Developer Network](https://developer.linkedin.com/
 
 ## Code and bug reporting
 
-You can open a issue at https://github.com/Arisamiga/Linkedin-RSS
+You can open a issue at https://github.com/mrmcmuffinz/Linkedin-RSS
