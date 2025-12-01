@@ -3,11 +3,6 @@ name: Check dist folder empty
 on:
   pull_request:
 
-# Cancel in-progress runs for the same workflow on the same branch
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   check-dist:
     name: Check dist is up-to-date
