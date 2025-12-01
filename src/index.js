@@ -1,6 +1,9 @@
-const core = require("@actions/core");
-const RSSParser = require("rss-parser");
-const https = require("https");
+import * as core from "@actions/core";
+import RSSParser from "rss-parser";
+import https from "https";
+import fs from "fs";
+import path from "path";
+import { execSync } from "node:child_process";
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Generic Node.js API to post on LinkedIn
@@ -48,8 +51,6 @@ function getLinkedinId(accessToken) {
 // Check if post has already been published
 function wasPostPublished(feed) {
   // Read .lastPost file in .github/workflows/ to check if the post has been posted
-  const fs = require("fs");
-  const path = require("path");
   const lastPost = path.join(process.env.GITHUB_WORKSPACE, lastPostPath);
 
   let lastPostContent = "";
@@ -78,8 +79,6 @@ function wasPostPublished(feed) {
 
 function pushPastFile() {
   // push the file changes to repository
-  const { execSync } = require("child_process");
-  const path = require("path");
   const lastPost = path.join(process.env.GITHUB_WORKSPACE, lastPostPath);
 
   try {
