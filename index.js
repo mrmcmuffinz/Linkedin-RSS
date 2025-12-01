@@ -55,7 +55,7 @@ function wasPostPublished(feed) {
   let lastPostContent = "";
   try {
     lastPostContent = fs.readFileSync(lastPost, "utf8");
-  } catch (e) {
+  } catch {
     console.log("No .lastPost.txt file found");
 
     // Create directories if they dont exist
@@ -78,27 +78,27 @@ function wasPostPublished(feed) {
 
 function pushPastFile() {
   // push the file changes to repository
-  const { execSync } = require('child_process');
+  const { execSync } = require("child_process");
   const path = require("path");
   const lastPost = path.join(process.env.GITHUB_WORKSPACE, lastPostPath);
 
   try {
     execSync(`git config user.email "${commitEmail}"`);
     execSync(`git config user.name "${commitUser}"`);
-    const status = execSync('git status --porcelain').toString('utf8').trim();
+    const status = execSync("git status --porcelain").toString("utf8").trim();
     if (!status) {
-      console.log('No changes to commit.');
+      console.log("No changes to commit.");
       return;
     }
-    execSync(`git add "${lastPost}"`, { stdio: 'inherit' });
+    execSync(`git add "${lastPost}"`, { stdio: "inherit" });
     const safeMsg = commitMessage.replace(/"/g, '\\"');
-    execSync(`git commit -m "${safeMsg}"`, { stdio: 'inherit' });
-    execSync('git push', { stdio: 'inherit' });
-    console.log('pushPastFile: pushed successfully');
+    execSync(`git commit -m "${safeMsg}"`, { stdio: "inherit" });
+    execSync("git push", { stdio: "inherit" });
+    console.log("pushPastFile: pushed successfully");
   } catch (err) {
-    console.error('pushPastFile failed: ', err && err.message);
-    if (err.stdout) console.error('stdout: ', err.stdout.toString());
-    if (err.stderr) console.error('stderr: ', err.stderr.toString());
+    console.error("pushPastFile failed: ", err && err.message);
+    if (err.stdout) console.error("stdout: ", err.stdout.toString());
+    if (err.stderr) console.error("stderr: ", err.stderr.toString());
     throw err;
   }
 }
@@ -110,7 +110,7 @@ function postShare(
   title,
   text,
   shareUrl,
-  shareThumbnailUrl
+  shareThumbnailUrl,
 ) {
   return new Promise((resolve, reject) => {
     const hostname = "api.linkedin.com";
@@ -208,13 +208,13 @@ try {
           feed.title,
           feed.items[0].title,
           feed.items[0].link,
-          embedImage ?? feed.items[0].link
+          embedImage ?? feed.items[0].link,
         )
           .then((r) => {
             console.log(r); // status 201 signal successful posting
             if (r.status === 401) {
               core.setFailed(
-                "Failed to post on LinkedIn, please check your access token is valid"
+                "Failed to post on LinkedIn, please check your access token is valid",
               );
               return;
             } else if (r.status !== 201) {
@@ -227,7 +227,7 @@ try {
       })
       .catch((e) => console.log(e));
     console.log(
-      `${feed.items[0].title} - ${feed.items[0].link}\n${feed.items[0].contentSnippet}\n\n`
+      `${feed.items[0].title} - ${feed.items[0].link}\n${feed.items[0].contentSnippet}\n\n`,
     );
   };
 
