@@ -39916,11 +39916,9 @@ async function run() {
       coreExports.error(
         "Please check your LinkedIn access token is valid and has not expired",
       );
-      return;
     } else {
       coreExports.setFailed(`Failed to post on LinkedIn (Status: ${result.status})`);
       coreExports.error(`Response: ${result.body}`);
-      return;
     }
   } catch (error) {
     coreExports.setFailed(`Action failed: ${error.message}`);

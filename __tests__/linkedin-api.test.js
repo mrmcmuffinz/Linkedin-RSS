@@ -137,7 +137,7 @@ describe("LinkedIn API", () => {
         "https://example.com/image.jpg",
       );
 
-      expect(capturedHeaders["authorization"]).toBe("Bearer test-token");
+      expect(capturedHeaders.authorization).toBe("Bearer test-token");
       expect(capturedHeaders["content-type"]).toBe("application/json");
       expect(capturedHeaders["x-restli-protocol-version"]).toBe("2.0.0");
     });
